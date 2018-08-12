@@ -18,7 +18,7 @@
 
 ## Minesweeper Game API / State
 
-Cell State Legend:
+### Cell State Legend:
 
 - 0: Unvisited, no bomb
 
@@ -29,3 +29,46 @@ Cell State Legend:
 - 3: Unvisited, no bomb, flagged
 
 - 4: Unvisited, bomb, flagged
+
+### API / Usage
+
+#### Constructor
+
+```javascript
+const game = new MinesweeperGame(/* difficulty */, /* options */);
+```
+
+Difficulty setting is required. If difficulty set to `'custom'`, options are required, otherwise they are unused.
+
+Difficulty Settings:
+
+- `'easy'`
+- `'medium'`
+- `'hard'`
+- `'custom'`
+
+Options Interface:
+
+```javascript
+{
+  n: /* number of rows */,
+  m: /* number of columns */,
+  b: /* number of bombs */
+}
+```
+
+#### checkCell
+
+```javascript
+game.checkCell(/* row */, /* column */); /* --> [game._status, game.grid] */
+```
+
+Checks a cell for a bomb returns a tuple with the game status in the first position and the game grid in the second.
+
+#### flagCell
+
+```javascript
+game.checkCell(/* row */, /* column */); /* --> void */
+```
+
+Updates board state to indicate cell is flagged. Can only flag unvisited cells. Doesn't return anything.
