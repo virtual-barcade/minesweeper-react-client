@@ -1,4 +1,4 @@
-# first-world-problems REST api
+# minesweeper-browser
 
 ## Commit Guidelines
 
