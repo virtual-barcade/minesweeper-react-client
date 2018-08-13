@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Settings from './components/Settings';
+import GameBoard from './GameBoard';
 import logo from './logo.svg';
 import './styles/App.css';
+
+const MinesweeperGame = require('./lib/MinesweeperGame');
 
 class App extends Component {
   constructor(props) {
@@ -11,6 +14,7 @@ class App extends Component {
       width: '9',
       height: '9',
       mines: '10',
+      game: new MinesweeperGame('easy'),
     };
   }
 
@@ -21,7 +25,7 @@ class App extends Component {
   };
 
   render() {
-    const { difficulty, width, height, mines } = this.state;
+    const { difficulty, width, height, mines, game } = this.state;
     return (
       <div className="App">
         <header className="App-header">
@@ -35,6 +39,7 @@ class App extends Component {
           height={height}
           mines={mines}
         />
+        <GameBoard game={game} grid={game.grid} />
       </div>
     );
   }
