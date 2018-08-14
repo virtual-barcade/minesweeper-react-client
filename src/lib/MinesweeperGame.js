@@ -52,21 +52,23 @@ class MinesweeperGame {
   }
 
   static _initializeMatrix(n, m, b) {
-    const matrix = [];
+    const matrix = [[]];
 
-    const emptySquares = new Array(n * m - b).fill(0);
-    const bombSquares = new Array(b).fill(1);
-    const allSquares = MinesweeperGame._shuffle(
-      emptySquares.concat(bombSquares),
-    );
+    if (n * m - b > 0) {
+      const emptySquares = new Array(n * m - b).fill(0);
+      const bombSquares = new Array(b).fill(1);
+      const allSquares = MinesweeperGame._shuffle(
+        emptySquares.concat(bombSquares),
+      );
 
-    let k = -1;
-    for (let i = 0; i < allSquares.length; i++) {
-      if (i % m === 0) {
-        k++;
-        matrix[k] = [];
+      let k = -1;
+      for (let i = 0; i < allSquares.length; i++) {
+        if (i % m === 0) {
+          k++;
+          matrix[k] = [];
+        }
+        matrix[k].push(allSquares[i]);
       }
-      matrix[k].push(allSquares[i]);
     }
 
     return matrix;
