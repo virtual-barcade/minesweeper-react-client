@@ -19,8 +19,9 @@ class Cell extends Component {
     const style = {
       color: countToColorMapping[value],
     };
+    const className = value !== '_' ? 'cell revealed' : 'cell';
     return (
-      <span style={style} className="cell" onClick={() => checkCell(x, y)}>
+      <span style={style} className={className} onClick={() => checkCell(x, y)}>
         {value}
       </span>
     );

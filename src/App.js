@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Settings from './components/Settings';
-import GameBoard from './GameBoard';
+import GameBoard from './components/GameBoard';
 import './styles/App.css';
 
 const MinesweeperGame = require('./lib/MinesweeperGame');
@@ -16,6 +16,7 @@ class App extends Component {
       mines: '10',
       game,
       grid: game.grid,
+      status: game.status,
     };
   }
 
@@ -28,7 +29,7 @@ class App extends Component {
       b: mines,
     };
     const game = new MinesweeperGame(difficulty, options);
-    this.setState({ game, grid: game.grid });
+    this.setState({ game, grid: game.grid, status: game.status });
   };
 
   _copyGrid = () => {
@@ -41,7 +42,7 @@ class App extends Component {
     const { game } = this.state;
     game.checkCell(Number(row), Number(col));
     const grid = this._copyGrid();
-    this.setState({ grid });
+    this.setState({ grid, status: game.status }, () => console.log(this.state));
   };
 
   handleChange = event => {
@@ -49,7 +50,8 @@ class App extends Component {
   };
 
   render() {
-    const { difficulty, width, height, mines, grid } = this.state;
+    const { difficulty, width, height, mines, grid, status } = this.state;
+    if (status === 'lost') console.log('LOST');
     return (
       <div className="App">
         <header className="App-header">
@@ -63,7 +65,7 @@ class App extends Component {
           height={height}
           mines={mines}
         />
-        <GameBoard grid={grid} checkCell={this.checkCell} />
+        <GameBoard grid={grid} checkCell={this.checkCell} status={status} />
       </div>
     );
   }
