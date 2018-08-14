@@ -8,6 +8,8 @@
     ],
     "react/jsx-filename-extension": "off",
     "no-plusplus": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/no-array-index-key": "off"
   }
 }

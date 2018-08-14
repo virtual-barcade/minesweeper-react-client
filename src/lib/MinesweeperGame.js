@@ -5,7 +5,7 @@ const Queue = require('./Queue');
 class MinesweeperGame {
   constructor(difficulty = 'easy', options) {
     this._numRevealedCells = 0;
-    this._status = 'in-progress';
+    this.status = 'in-progress';
 
     this._difficultySettings = {
       easy: {
@@ -52,30 +52,32 @@ class MinesweeperGame {
   }
 
   static _initializeMatrix(n, m, b) {
-    const matrix = [];
+    const matrix = [[]];
 
-    const emptySquares = new Array(n * m - b).fill(0);
-    const bombSquares = new Array(b).fill(1);
-    const allSquares = MinesweeperGame._shuffle(
-      emptySquares.concat(bombSquares),
-    );
+    if (n * m - b > 0) {
+      const emptySquares = new Array(n * m - b).fill(0);
+      const bombSquares = new Array(b).fill(1);
+      const allSquares = MinesweeperGame._shuffle(
+        emptySquares.concat(bombSquares),
+      );
 
-    let k = -1;
-    for (let i = 0; i < allSquares.length; i++) {
-      if (i % m === 0) {
-        k++;
-        matrix[k] = [];
+      let k = -1;
+      for (let i = 0; i < allSquares.length; i++) {
+        if (i % m === 0) {
+          k++;
+          matrix[k] = [];
+        }
+        matrix[k].push(allSquares[i]);
       }
-      matrix[k].push(allSquares[i]);
     }
 
     return matrix;
   }
 
   _setBoardState(n, m, b) {
-    this._numRows = n;
-    this._numColumns = m;
-    this._numBombs = b;
+    this.numRows = n;
+    this.numColumns = m;
+    this.numBombs = b;
     this._matrix = MinesweeperGame._initializeMatrix(n, m, b);
   }
 
@@ -94,7 +96,7 @@ class MinesweeperGame {
     for (let i = 0; i < this._matrix.length; i++) {
       for (let j = 0; j < this._matrix[i].length; j++) {
         const value = this._matrix[i][j];
-        if (value === 1) {
+        if (value === 1 || value === 4) {
           this.grid[i][j] = 'B';
         }
       }
@@ -130,7 +132,9 @@ class MinesweeperGame {
       const [x, y] = q.dequeue();
       if (this._matrix[x]) {
         const cell = this._matrix[x][y];
-        if (cell === 1 || cell === 2 || cell === 4) continue;
+        if (cell === undefined || cell === 1 || cell === 2 || cell === 4) {
+          continue;
+        }
         const numBombs = this._countBombs(x, y);
         if (numBombs === 0) {
           this._markCellAsVisited(x, y, numBombs);
@@ -151,33 +155,44 @@ class MinesweeperGame {
 
   _gameWon() {
     const remainingCells =
-      this._numRows * this._numColumns - this._numRevealedCells;
+      this.numRows * this.numColumns - this._numRevealedCells;
 
-    return remainingCells === this._numBombs;
+    return remainingCells === this.numBombs;
   }
 
   checkCell(row, col) {
-    const cell = this._matrix[row][col];
-    if (cell === 1 || cell === 4) {
-      this._status = 'lost';
-      this._revealGrid();
-      return [this._status, this.grid];
+    if (this.status === 'in-progress') {
+      const cell = this._matrix[row][col];
+      if (cell === 1 || cell === 4) {
+        this.status = 'lost';
+        this._revealGrid();
+        return [this.status, this.grid];
+      }
+      this._sweep(row, col);
+      if (this._gameWon()) {
+        this.status = 'won';
+        /* works for now, would want to flag bombs not reveal */
+        this._revealGrid();
+        return [this.status, this.grid];
+      }
+      return [this.status, this.grid];
     }
-    this._sweep(row, col);
-    if (this._gameWon()) {
-      this._status = 'won';
-      /* works for now, would want to flag bombs not reveal */
-      this._revealGrid();
-      return [this._status, this.grid];
-    }
-    return [this._status, this.grid];
+
+    return [this.status, this.grid];
   }
 
   flagCell(row, col) {
-    const cell = this._matrix[row][col];
-    if (cell !== 2) {
-      this._matrix[row][col] = this._cellStateToggleMapping[cell];
+    if (this.status === 'in-progress') {
+      const cell = this._matrix[row][col];
+      if (cell !== 2) {
+        this._matrix[row][col] = this._cellStateToggleMapping[cell];
+      }
     }
+  }
+
+  cellIsFlagged(row, col) {
+    const cell = this._matrix[row][col];
+    return cell === 3 || cell === 4;
   }
 }
 
