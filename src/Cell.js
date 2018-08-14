@@ -5,17 +5,16 @@ import './styles/Cell.css';
 class Cell extends Component {
   constructor(props) {
     super(props);
-    const { x, y, value } = props;
+    const { x, y } = props;
     this.state = {
       x,
       y,
-      value,
     };
   }
 
   render() {
-    const { x, y, value } = this.state;
-    const { checkCell } = this.props;
+    const { x, y } = this.state;
+    const { checkCell, value } = this.props;
     return (
       <span className="cell" onClick={() => checkCell(x, y)}>
         {value}
