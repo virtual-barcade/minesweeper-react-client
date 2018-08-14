@@ -1,4 +1,4 @@
-export const countToColorMapping = {
+const countToColorMapping = {
   '0': 'black',
   '1': 'green',
   '2': 'blue',
@@ -9,3 +9,5 @@ export const countToColorMapping = {
   '7': 'fuschia',
   '8': 'teal',
 };
+
+export default countToColorMapping;

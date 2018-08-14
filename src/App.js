@@ -67,8 +67,7 @@ class App extends Component {
   };
 
   checkCell = (row, col) => {
-    const { game } = this.state;
-    game.checkCell(Number(row), Number(col));
+    this.state.game.checkCell(Number(row), Number(col));
   };
 
   startTimer = () => {
@@ -97,10 +96,22 @@ class App extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  respondToStatusChange = status => {
+    let message;
+    let className;
+    if (status === 'won') {
+      message = 'You Win!';
+      className = 'App-title game-over';
+    } else {
+      message = '';
+      className = 'App-title';
+    }
+    return [message, className];
+  };
+
   render() {
     const { difficulty, width, height, mines, grid, status, time } = this.state;
-    const message = status === 'won' ? 'You Win!' : '';
-    const className = status === 'won' ? 'App-title game-over' : 'App-title';
+    const [message, className] = this.respondToStatusChange(status);
     if (status === 'won') this.stopTimer();
     return (
       <div className="App">
