@@ -8,8 +8,6 @@ class GameBoard extends Component {
       game: props.game,
       grid: props.grid,
     };
-    console.log(props.game._matrix);
-    console.log(props.game.grid);
   }
 
   _copyGrid = () => {
@@ -20,12 +18,9 @@ class GameBoard extends Component {
 
   checkCell = (row, col) => {
     const { game } = this.state;
-    console.log(game._matrix);
-    console.log(game.grid);
-    console.log(Number(row), Number(col));
     game.checkCell(Number(row), Number(col));
-    // const grid = this._copyGrid();
-    // this.setState({ grid });
+    const grid = this._copyGrid();
+    this.setState({ grid });
   };
 
   render() {
