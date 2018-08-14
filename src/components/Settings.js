@@ -3,22 +3,32 @@ import PropTypes from 'prop-types';
 import DifficultySelect from './DifficultySelect';
 import CustomSelect from './CustomSelect';
 
-const Settings = ({ handleChange, difficulty, width, height, mines }) => (
+const Settings = ({
+  handleChange,
+  changeDifficulty,
+  difficulty,
+  width,
+  height,
+  mines,
+}) => (
   <div>
-    <DifficultySelect
-      handleChange={handleChange}
-      difficultySetting={difficulty}
-    />
-    {difficulty === 'custom' ? (
-      <CustomSelect
+    <form onSubmit={changeDifficulty}>
+      <DifficultySelect
         handleChange={handleChange}
-        width={width}
-        height={height}
-        mines={mines}
+        difficultySetting={difficulty}
       />
-    ) : (
-      <div />
-    )}
+      {difficulty === 'custom' ? (
+        <CustomSelect
+          handleChange={handleChange}
+          width={width}
+          height={height}
+          mines={mines}
+        />
+      ) : (
+        <div />
+      )}
+      <button type="submit">New Game</button>
+    </form>
   </div>
 );
 
@@ -26,6 +36,7 @@ const { func, string } = PropTypes;
 
 Settings.propTypes = {
   handleChange: func.isRequired,
+  changeDifficulty: func.isRequired,
   difficulty: string.isRequired,
   width: string.isRequired,
   height: string.isRequired,
