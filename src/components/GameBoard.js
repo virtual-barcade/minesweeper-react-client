@@ -4,6 +4,16 @@ import Timer from './Timer';
 import Row from './Row';
 import '../styles/GameBoard.css';
 
+const respondToStatusChange = status => {
+  let className;
+  if (status === 'lost') {
+    className = 'game-over';
+  } else {
+    className = 'game-board';
+  }
+  return className;
+};
+
 const GameBoard = ({
   grid,
   handleClick,
@@ -13,7 +23,7 @@ const GameBoard = ({
   time,
   mines,
 }) => {
-  const className = status === 'lost' ? 'game-over' : 'game-board';
+  const className = respondToStatusChange(status);
   if (status === 'lost') stopTimer();
   return (
     <div className={className}>
