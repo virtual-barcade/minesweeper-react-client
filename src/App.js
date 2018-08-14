@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Settings from './components/Settings';
 import GameBoard from './GameBoard';
-import logo from './logo.svg';
 import './styles/App.css';
 
 const MinesweeperGame = require('./lib/MinesweeperGame');

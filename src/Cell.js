@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { countToColorMapping } from './helpers/index';
 import './styles/Cell.css';
 
 class Cell extends Component {
@@ -15,8 +16,11 @@ class Cell extends Component {
   render() {
     const { x, y } = this.state;
     const { checkCell, value } = this.props;
+    const style = {
+      color: countToColorMapping[value],
+    };
     return (
-      <span className="cell" onClick={() => checkCell(x, y)}>
+      <span style={style} className="cell" onClick={() => checkCell(x, y)}>
         {value}
       </span>
     );
