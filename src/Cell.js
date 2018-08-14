@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import './styles/Cell.css';
 
 class Cell extends Component {
   constructor(props) {
@@ -13,9 +15,22 @@ class Cell extends Component {
 
   render() {
     const { x, y, value } = this.state;
-    console.log(`${x}${y}`);
-    return <span>{value}</span>;
+    const { checkCell } = this.props;
+    return (
+      <span className="cell" onClick={() => checkCell(x, y)}>
+        {value}
+      </span>
+    );
   }
 }
+
+const { string, func } = PropTypes;
+
+Cell.propTypes = {
+  x: string.isRequired,
+  y: string.isRequired,
+  value: string.isRequired,
+  checkCell: func.isRequired,
+};
 
 export default Cell;

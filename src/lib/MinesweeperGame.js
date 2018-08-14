@@ -132,6 +132,7 @@ class MinesweeperGame {
         const cell = this._matrix[x][y];
         if (cell === 1 || cell === 2 || cell === 4) continue;
         const numBombs = this._countBombs(x, y);
+        if (x === 8 && y === 0) console.log(numBombs);
         if (numBombs === 0) {
           this._markCellAsVisited(x, y, numBombs);
           q.enqueue([x - 1, y - 1]);
