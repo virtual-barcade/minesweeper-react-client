@@ -159,26 +159,32 @@ class MinesweeperGame {
   }
 
   checkCell(row, col) {
-    const cell = this._matrix[row][col];
-    if (cell === 1 || cell === 4) {
-      this._status = 'lost';
-      this._revealGrid();
+    if (this._status === 'in-progress') {
+      const cell = this._matrix[row][col];
+      if (cell === 1 || cell === 4) {
+        this._status = 'lost';
+        this._revealGrid();
+        return [this._status, this.grid];
+      }
+      this._sweep(row, col);
+      if (this._gameWon()) {
+        this._status = 'won';
+        /* works for now, would want to flag bombs not reveal */
+        this._revealGrid();
+        return [this._status, this.grid];
+      }
       return [this._status, this.grid];
     }
-    this._sweep(row, col);
-    if (this._gameWon()) {
-      this._status = 'won';
-      /* works for now, would want to flag bombs not reveal */
-      this._revealGrid();
-      return [this._status, this.grid];
-    }
+
     return [this._status, this.grid];
   }
 
   flagCell(row, col) {
-    const cell = this._matrix[row][col];
-    if (cell !== 2) {
-      this._matrix[row][col] = this._cellStateToggleMapping[cell];
+    if (this._status === 'in-progress') {
+      const cell = this._matrix[row][col];
+      if (cell !== 2) {
+        this._matrix[row][col] = this._cellStateToggleMapping[cell];
+      }
     }
   }
 }
