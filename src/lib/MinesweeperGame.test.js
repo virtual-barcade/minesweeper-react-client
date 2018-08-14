@@ -152,12 +152,8 @@ describe(`MinesweeperGame's checkCell method`, () => {
 });
 
 describe(`MinesweeperGame's sweep method`, () => {
-  let bombMatrix;
-  let game;
-
-  beforeEach(() => {
-    // prettier-ignore
-    bombMatrix = [
+  test(`should continuously reveal all surrounding cells that also have zero bombs.`, () => {
+    const bombMatrix = [
       [0, 1, 0, 0, 0, 0, 0, 0, 1],
       [0, 1, 1, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 1, 0, 0, 0, 0, 0],
@@ -168,11 +164,54 @@ describe(`MinesweeperGame's sweep method`, () => {
       [0, 1, 0, 0, 0, 0, 1, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
-    game = new MinesweeperGame();
+    const game = new MinesweeperGame();
     game._matrix = bombMatrix;
-  });
-  test(`should continuously reveal all surrounding cells that also have zero bombs.`, () => {
     game.checkCell(8, 4);
+    // prettier-ignore
+    const expectedGrid = [
+      ['_', '_', '_', '_', '_', '_', '_', '_', '_'],
+      ['_', '_', '_', '_', '_', '_', '_', '_', '_'],
+      ['_', '_', '_', '_', '_', '_', '_', '_', '_'],
+      ['_', '_', '_', '_', '_', '_', '_', '_', '_'],
+      ['_', '_', '_', '1', '1', '2', '_', '_', '_'],
+      ['_', '_', '_', '1', '0', '1', '_', '_', '_'],
+      ['_', '_', '_', '1', '0', '2', '_', '_', '_'],
+      ['_', '_', '2', '1', '0', '1', '_', '_', '_'],
+      ['_', '_', '1', '0', '0', '1', '_', '_', '_'],
+    ];
+    const expectedMatrix = [
+      [0, 1, 0, 0, 0, 0, 0, 0, 1],
+      [0, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 0, 0, 1, 0, 0],
+      [0, 0, 0, 2, 2, 2, 0, 0, 0],
+      [0, 0, 0, 2, 2, 2, 1, 0, 0],
+      [0, 0, 1, 2, 2, 2, 0, 0, 0],
+      [0, 1, 2, 2, 2, 2, 1, 0, 0],
+      [0, 0, 2, 2, 2, 2, 0, 0, 0],
+    ];
+    expect(game.grid).toEqual(expectedGrid);
+    expect(game._matrix).toEqual(expectedMatrix);
+  });
+
+  test(`should continuously reveal all surrounding cells that also have zero bombs.`, () => {
+    const bombMatrix = [
+      [0, 1, 1, 0, 0, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 0, 1, 1, 0, 0],
+    ];
+    const game = new MinesweeperGame();
+    game._matrix = bombMatrix;
+    // edge case that breaks game
+    game.checkCell(8, 0);
+    console.log(game._matrix);
+    console.log(game.grid);
     // prettier-ignore
     const expectedGrid = [
       ['_', '_', '_', '_', '_', '_', '_', '_', '_'],
