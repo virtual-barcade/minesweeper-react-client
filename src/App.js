@@ -38,11 +38,26 @@ class App extends Component {
     return grid;
   };
 
-  checkCell = (row, col) => {
+  cellIsFlagged = (row, col) => {
+    return this.state.game.cellIsFlagged(row, col);
+  };
+
+  flagCell = (row, col) => {
+    this.state.game.flagCell(row, col);
+  };
+
+  checkCell = (e, row, col) => {
+    e.preventDefault();
     const { game } = this.state;
-    game.checkCell(Number(row), Number(col));
-    const grid = this._copyGrid();
-    this.setState({ grid, status: game.status }, () => console.log(this.state));
+    if (e.type === 'click') {
+      game.checkCell(Number(row), Number(col));
+      const grid = this._copyGrid();
+      this.setState({ grid, status: game.status });
+    } else if (e.type === 'contextmenu') {
+      this.flagCell(row, col);
+      const grid = this._copyGrid();
+      this.setState({ grid, status: game.status });
+    }
   };
 
   handleChange = event => {
@@ -51,7 +66,6 @@ class App extends Component {
 
   render() {
     const { difficulty, width, height, mines, grid, status } = this.state;
-    if (status === 'lost') console.log('LOST');
     return (
       <div className="App">
         <header className="App-header">
@@ -65,7 +79,12 @@ class App extends Component {
           height={height}
           mines={mines}
         />
-        <GameBoard grid={grid} checkCell={this.checkCell} status={status} />
+        <GameBoard
+          grid={grid}
+          checkCell={this.checkCell}
+          status={status}
+          cellIsFlagged={this.cellIsFlagged}
+        />
       </div>
     );
   }

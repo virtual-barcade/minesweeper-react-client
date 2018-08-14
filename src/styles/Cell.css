@@ -1,6 +1,7 @@
 .cell {
-  margin: 2px;
+  margin: 4px;
   background-color: aliceblue;
+  cursor: pointer;
 }
 
 @keyframes fade-in {
@@ -14,4 +15,12 @@
 
 .revealed {
   animation: fade-in ease 0.5s;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
