@@ -5,7 +5,7 @@ const Queue = require('./Queue');
 class MinesweeperGame {
   constructor(difficulty = 'easy', options) {
     this._numRevealedCells = 0;
-    this._status = 'in-progress';
+    this.status = 'in-progress';
 
     this._difficultySettings = {
       easy: {
@@ -159,28 +159,28 @@ class MinesweeperGame {
   }
 
   checkCell(row, col) {
-    if (this._status === 'in-progress') {
+    if (this.status === 'in-progress') {
       const cell = this._matrix[row][col];
       if (cell === 1 || cell === 4) {
-        this._status = 'lost';
+        this.status = 'lost';
         this._revealGrid();
-        return [this._status, this.grid];
+        return [this.status, this.grid];
       }
       this._sweep(row, col);
       if (this._gameWon()) {
-        this._status = 'won';
+        this.status = 'won';
         /* works for now, would want to flag bombs not reveal */
         this._revealGrid();
-        return [this._status, this.grid];
+        return [this.status, this.grid];
       }
-      return [this._status, this.grid];
+      return [this.status, this.grid];
     }
 
-    return [this._status, this.grid];
+    return [this.status, this.grid];
   }
 
   flagCell(row, col) {
-    if (this._status === 'in-progress') {
+    if (this.status === 'in-progress') {
       const cell = this._matrix[row][col];
       if (cell !== 2) {
         this._matrix[row][col] = this._cellStateToggleMapping[cell];
