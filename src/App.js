@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Settings from './components/Settings';
 import GameBoard from './components/GameBoard';
 import './styles/App.css';
+import './styles/GameBoard.css';
 
 const MinesweeperGame = require('./lib/MinesweeperGame');
 
@@ -93,10 +94,14 @@ class App extends Component {
 
   render() {
     const { difficulty, width, height, mines, grid, status, time } = this.state;
+    const message = status === 'won' ? 'You Win!' : '';
+    const className = status === 'won' ? 'App-title game-over' : 'App-title';
+    if (status === 'won') this.stopTimer();
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Minesweeper</h1>
+          <h2 className={className}>{message}</h2>
         </header>
         <Settings
           handleChange={this.handleChange}
