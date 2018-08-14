@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Cell from '../Cell';
 
-const Row = ({ row, i, checkCell, cellIsFlagged }) => {
+const Row = ({ row, i, handleClick, cellIsFlagged }) => {
   const gridState = row.map((value, j) => (
     <Cell
       key={`${i}${j}`}
       x={i}
       y={j.toString()}
       value={value}
-      checkCell={checkCell}
+      handleClick={handleClick}
       flagged={cellIsFlagged(i, j)}
     />
   ));
@@ -21,7 +21,7 @@ const { arrayOf, string, func } = PropTypes;
 Row.propTypes = {
   row: arrayOf(string).isRequired,
   i: string.isRequired,
-  checkCell: func.isRequired,
+  handleClick: func.isRequired,
   cellIsFlagged: func.isRequired,
 };
 

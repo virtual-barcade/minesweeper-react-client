@@ -75,9 +75,9 @@ class MinesweeperGame {
   }
 
   _setBoardState(n, m, b) {
-    this._numRows = n;
-    this._numColumns = m;
-    this._numBombs = b;
+    this.numRows = n;
+    this.numColumns = m;
+    this.numBombs = b;
     this._matrix = MinesweeperGame._initializeMatrix(n, m, b);
   }
 
@@ -155,9 +155,9 @@ class MinesweeperGame {
 
   _gameWon() {
     const remainingCells =
-      this._numRows * this._numColumns - this._numRevealedCells;
+      this.numRows * this.numColumns - this._numRevealedCells;
 
-    return remainingCells === this._numBombs;
+    return remainingCells === this.numBombs;
   }
 
   checkCell(row, col) {
