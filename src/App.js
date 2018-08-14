@@ -24,9 +24,9 @@ class App extends Component {
     e.preventDefault();
     const { difficulty, width, height, mines } = this.state;
     const options = {
-      n: height,
-      m: width,
-      b: mines,
+      n: Number(height),
+      m: Number(width),
+      b: Number(mines),
     };
     const game = new MinesweeperGame(difficulty, options);
     this.setState({ game, grid: game.grid, status: game.status });

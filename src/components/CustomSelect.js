@@ -14,7 +14,7 @@ const CustomSelect = ({ handleChange, width, height, mines }) => (
           id="width"
           name="width"
           min="1"
-          max="1000"
+          max="30"
           value={width}
           step="1"
         />
@@ -29,7 +29,7 @@ const CustomSelect = ({ handleChange, width, height, mines }) => (
           id="height"
           name="height"
           min="1"
-          max="1000"
+          max="24"
           value={height}
           step="1"
         />
@@ -44,7 +44,7 @@ const CustomSelect = ({ handleChange, width, height, mines }) => (
           id="mines"
           name="mines"
           min="1"
-          max="1000"
+          max={width * height}
           value={mines}
           step="1"
         />
