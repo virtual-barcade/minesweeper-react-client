@@ -187,6 +187,11 @@ class MinesweeperGame {
       }
     }
   }
+
+  cellIsFlagged(row, col) {
+    const cell = this._matrix[row][col];
+    return cell === 3 || cell === 4;
+  }
 }
 
 module.exports = MinesweeperGame;

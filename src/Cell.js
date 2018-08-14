@@ -15,26 +15,33 @@ class Cell extends Component {
 
   render() {
     const { x, y } = this.state;
-    const { checkCell, value } = this.props;
+    const { checkCell, value, flagged } = this.props;
     const style = {
       color: countToColorMapping[value],
     };
-    const className = value !== '_' ? 'cell revealed' : 'cell';
+    const className =
+      value !== '_' ? 'cell noselect revealed' : 'cell noselect';
     return (
-      <span style={style} className={className} onClick={() => checkCell(x, y)}>
-        {value}
+      <span
+        style={style}
+        className={className}
+        onClick={e => checkCell(e, x, y)}
+        onContextMenu={e => checkCell(e, x, y)}
+      >
+        {flagged ? '?' : value}
       </span>
     );
   }
 }
 
-const { string, func } = PropTypes;
+const { string, func, bool } = PropTypes;
 
 Cell.propTypes = {
   x: string.isRequired,
   y: string.isRequired,
   value: string.isRequired,
   checkCell: func.isRequired,
+  flagged: bool.isRequired,
 };
 
 export default Cell;
