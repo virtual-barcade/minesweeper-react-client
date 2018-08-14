@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Timer from './Timer';
 import Row from './Row';
 import '../styles/GameBoard.css';
@@ -30,6 +31,18 @@ const GameBoard = ({
       </div>
     </div>
   );
+};
+
+const { arrayOf, string, func, number } = PropTypes;
+
+GameBoard.propTypes = {
+  grid: arrayOf(arrayOf(string)).isRequired,
+  handleClick: func.isRequired,
+  status: string.isRequired,
+  cellIsFlagged: func.isRequired,
+  stopTimer: func.isRequired,
+  time: number.isRequired,
+  mines: string.isRequired,
 };
 
 export default GameBoard;
