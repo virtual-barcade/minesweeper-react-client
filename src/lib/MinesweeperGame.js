@@ -94,7 +94,7 @@ class MinesweeperGame {
     for (let i = 0; i < this._matrix.length; i++) {
       for (let j = 0; j < this._matrix[i].length; j++) {
         const value = this._matrix[i][j];
-        if (value === 1) {
+        if (value === 1 || value === 4) {
           this.grid[i][j] = 'B';
         }
       }
@@ -130,9 +130,10 @@ class MinesweeperGame {
       const [x, y] = q.dequeue();
       if (this._matrix[x]) {
         const cell = this._matrix[x][y];
-        if (cell === 1 || cell === 2 || cell === 4) continue;
+        if (cell === undefined || cell === 1 || cell === 2 || cell === 4) {
+          continue;
+        }
         const numBombs = this._countBombs(x, y);
-        if (x === 8 && y === 0) console.log(numBombs);
         if (numBombs === 0) {
           this._markCellAsVisited(x, y, numBombs);
           q.enqueue([x - 1, y - 1]);
