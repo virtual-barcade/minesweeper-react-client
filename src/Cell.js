@@ -15,7 +15,7 @@ class Cell extends Component {
 
   render() {
     const { x, y } = this.state;
-    const { checkCell, value, flagged } = this.props;
+    const { handleClick, value, flagged } = this.props;
     const style = {
       color: countToColorMapping[value],
     };
@@ -25,8 +25,8 @@ class Cell extends Component {
       <span
         style={style}
         className={className}
-        onClick={e => checkCell(e, x, y)}
-        onContextMenu={e => checkCell(e, x, y)}
+        onClick={e => handleClick(e, x, y)}
+        onContextMenu={e => handleClick(e, x, y)}
       >
         {flagged ? '?' : value}
       </span>
@@ -40,7 +40,7 @@ Cell.propTypes = {
   x: string.isRequired,
   y: string.isRequired,
   value: string.isRequired,
-  checkCell: func.isRequired,
+  handleClick: func.isRequired,
   flagged: bool.isRequired,
 };
 

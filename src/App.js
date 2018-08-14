@@ -17,19 +17,32 @@ class App extends Component {
       game,
       grid: game.grid,
       status: game.status,
+      time: 999,
+      timerID: null,
     };
   }
 
   changeDifficulty = e => {
     e.preventDefault();
     const { difficulty, width, height, mines } = this.state;
+    this.stopTimer();
     const options = {
       n: Number(height),
       m: Number(width),
       b: Number(mines),
     };
     const game = new MinesweeperGame(difficulty, options);
-    this.setState({ game, grid: game.grid, status: game.status });
+    const { grid, status, numColumns, numRows, numBombs } = game;
+    this.setState({
+      game,
+      grid: grid,
+      status: status,
+      width: numColumns.toString(),
+      height: numRows.toString(),
+      mines: numBombs.toString(),
+      time: 999,
+      timerID: null,
+    });
   };
 
   _copyGrid = () => {
@@ -46,9 +59,23 @@ class App extends Component {
     this.state.game.flagCell(row, col);
   };
 
-  checkCell = (e, row, col) => {
+  startTimer = () => {
+    let count = 0;
+    const timerID = setInterval(() => {
+      count += 1;
+      this.setState({ time: count });
+    }, 1000);
+    this.setState({ time: count, timerID });
+  };
+
+  stopTimer = () => {
+    clearInterval(this.state.timerID);
+  };
+
+  handleClick = (e, row, col) => {
     e.preventDefault();
-    const { game } = this.state;
+    const { game, time } = this.state;
+    if (time === 999) this.startTimer();
     if (e.type === 'click') {
       game.checkCell(Number(row), Number(col));
       const grid = this._copyGrid();
@@ -65,7 +92,7 @@ class App extends Component {
   };
 
   render() {
-    const { difficulty, width, height, mines, grid, status } = this.state;
+    const { difficulty, width, height, mines, grid, status, time } = this.state;
     return (
       <div className="App">
         <header className="App-header">
@@ -81,9 +108,12 @@ class App extends Component {
         />
         <GameBoard
           grid={grid}
-          checkCell={this.checkCell}
+          handleClick={this.handleClick}
           status={status}
           cellIsFlagged={this.cellIsFlagged}
+          stopTimer={this.stopTimer}
+          time={time}
+          mines={mines}
         />
       </div>
     );
