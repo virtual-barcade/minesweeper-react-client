@@ -16,6 +16,23 @@
 
 - Unit tests covering edge cases.
 
+## Start-Up
+
+If running locally, clone down repo and run `npm i` or `yarn` and `npm start` or `yarn start`.
+
+See deployed game here: [https://blissful-lichterman-984946.netlify.com/](https://blissful-lichterman-984946.netlify.com/)
+
+Note that I used `create-react-app` to scaffold the project.
+
+## Comments
+
+I'd like to note that one thing I did not get to was making the game board prettier. Ideally I'd like it to look as close to classic minesweeper as possible, or give it my own spin. I decided to focus on separating the game and presentation logic, ensuring the logic worked, and at least implementing the requested stylistic features i.e. adding animations for different events in the game.
+
+## Testing
+
+See `src/lib/MinesweeperGame.test.js` for game / business logic tests.
+See `src/App.test.js` for skeleton of client tests.
+
 ## Minesweeper Game API / State
 
 Minesweeper game logic resides in `src/lib/MinesweeperGame.js`.
@@ -97,4 +114,4 @@ Updates board state to indicate cell is flagged. Can only flag unvisited cells. 
 game.cellIsFlagged(/* row */, /* column */); /* --> boolean */
 ```
 
-Return true if cell is flagged and false if not.
+Returns true if cell is flagged and false if not.

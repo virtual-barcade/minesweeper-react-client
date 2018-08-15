@@ -24,8 +24,8 @@ class App extends Component {
   }
 
   /**
-   * The type of width, height, and mines while on the DOM is text.
-   * Ensured that when accessing the Minesweeper API, these text values are transformed
+   * The type of width, height, and mines while on the DOM is string.
+   * Ensured that when accessing the Minesweeper API, these string / text values are transformed
    * to a number since the API is expecting a number. Passing a string breaks the API.
    *
    * This would be another good edge case to test as part of TDD (passing string inputs
