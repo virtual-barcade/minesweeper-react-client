@@ -153,6 +153,7 @@ class MinesweeperGame {
     q.enqueue([row, col]);
     while (!q.isEmpty()) {
       const [x, y] = q.dequeue();
+      /* Ensure the row is in bounds. */
       if (this._matrix[x]) {
         const cell = this._matrix[x][y];
         /**
