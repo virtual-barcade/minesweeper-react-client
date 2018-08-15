@@ -18,6 +18,10 @@
 
 ## Minesweeper Game API / State
 
+Minesweeper game logic resides in `src/lib/MinesweeperGame.js`.
+
+I use a 2D array of integers to represent the different states a cell might have.
+
 ### Cell State Legend:
 
 - 0: Unvisited, no bomb
@@ -31,6 +35,20 @@
 - 4: Unvisited, bomb, flagged
 
 ### API / Usage
+
+Public Methods:
+
+- `checkCell` - Select a cell to sweep for a bomb.
+- `flagCell` - Flag a cell as possibly having a bomb.
+- `cellIsFlagged` - Check if a cell is flagged.
+
+Public Properties:
+
+- `numRows` - Height of underlying matrix i.e. number of rows.
+- `numColumns` - Width of underlying matrix i.e. number of columns.
+- `numBombs` - Number of bombs in matrix.
+- `status` - Game status i.e. won, lost or in-progress.
+- `grid` - A 2D array representing what the player sees when they play the game.
 
 #### Constructor
 
@@ -60,15 +78,23 @@ Options Interface:
 #### checkCell
 
 ```javascript
-game.checkCell(/* row */, /* column */); /* --> [game._status, game.grid] */
+game.checkCell(/* row */, /* column */); /* --> void */
 ```
 
-Checks a cell for a bomb returns a tuple with the game status in the first position and the game grid in the second.
+Checks a cell for a bomb. If cell does not have a bomb, counts surrounding bombs. If surrounding bomb count is zero, sweeps mine until it has found cells with a bomb count. Returns void i.e. implicit return of undefined.
 
 #### flagCell
 
 ```javascript
-game.checkCell(/* row */, /* column */); /* --> void */
+game.flagCell(/* row */, /* column */); /* --> void */
 ```
 
-Updates board state to indicate cell is flagged. Can only flag unvisited cells. Doesn't return anything.
+Updates board state to indicate cell is flagged. Can only flag unvisited cells. Returns void i.e. implicit return of undefined.
+
+#### cellIsFlagged
+
+```javascript
+game.cellIsFlagged(/* row */, /* column */); /* --> boolean */
+```
+
+Return true if cell is flagged and false if not.
