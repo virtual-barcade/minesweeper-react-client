@@ -5,8 +5,6 @@ const Queue = require('./Queue');
 class MinesweeperGame {
   constructor(difficulty = 'easy', options) {
     this._numRevealedCells = 0;
-    this.status = 'in-progress';
-
     this._difficultySettings = {
       easy: {
         n: 9,
@@ -25,6 +23,14 @@ class MinesweeperGame {
       },
     };
 
+    /**
+     * Object mapping corresponding states to each other to make it easy to toggle.
+     *
+     * 0 means unvisited, no bomb and 3 means unvisited, no bomb, and flagged
+     * so it ought to be a quick operation to toggle between the two.
+     *
+     * Same idea for 1 (unvisited, bomb) and 4 (unvisited, bomb, flagged).
+     */
     this._cellStateToggleMapping = {
       0: 3,
       1: 4,
@@ -40,9 +46,20 @@ class MinesweeperGame {
       this._setBoardState(n, m, b);
     }
 
+    this.status = 'in-progress';
     this.grid = this._initializeGrid();
   }
 
+  _setBoardState(n, m, b) {
+    this.numRows = n;
+    this.numColumns = m;
+    this.numBombs = b;
+    this._matrix = MinesweeperGame._initializeMatrix(n, m, b);
+  }
+
+  /**
+   *  Knuth / Fisher-Yates shuffle to ensure shuffle is truly random.
+   */
   static _shuffle(array) {
     for (let i = 0; i < array.length; i++) {
       const r = Math.round(Math.random() * i);
@@ -54,6 +71,14 @@ class MinesweeperGame {
   static _initializeMatrix(n, m, b) {
     const matrix = [[]];
 
+    /**
+     * JS errors when you try to give the array constructor a negative value.
+     * If not careful with inputs received from client, may end up with more bombs
+     * than there are spaces.
+     *
+     * This would be a good edge case to test for as part of TDD. Handled by below
+     * conditional ensuring we only generate a matrix if inputs are valid.
+     */
     if (n * m - b > 0) {
       const emptySquares = new Array(n * m - b).fill(0);
       const bombSquares = new Array(b).fill(1);
@@ -72,13 +97,6 @@ class MinesweeperGame {
     }
 
     return matrix;
-  }
-
-  _setBoardState(n, m, b) {
-    this.numRows = n;
-    this.numColumns = m;
-    this.numBombs = b;
-    this._matrix = MinesweeperGame._initializeMatrix(n, m, b);
   }
 
   _initializeGrid() {
@@ -125,19 +143,37 @@ class MinesweeperGame {
     this.grid[x][y] = numBombs.toString();
   }
 
+  /**
+   * Iterative BFS to sweep matrix for bombs.
+   * @param {integer} row
+   * @param {integer} col
+   */
   _sweep(row, col) {
     const q = new Queue();
     q.enqueue([row, col]);
     while (!q.isEmpty()) {
       const [x, y] = q.dequeue();
+      /* Ensure the row is in bounds. */
       if (this._matrix[x]) {
         const cell = this._matrix[x][y];
+        /**
+         * Skip if cell is visited, has a bomb, or is out of bounds.
+         *
+         * Another good edge case to test for is whether a cell is out of bounds.
+         *
+         * The way this BFS is constructed, it enqueues if the bombCount is zero. However
+         * since the _countBombs method returns 0 by default, it's possible to enqueue out of
+         * bound coordinates and get stuck in an infinite loop as the bomb count is zero
+         * even though the coordinates are out of bounds.
+         *
+         * Thus, evaluating the cell coordinates yields undefined, must skip this iteration
+         * and not do the bomb count calculation / enqueuing.
+         */
         if (cell === undefined || cell === 1 || cell === 2 || cell === 4) {
           continue;
         }
         const numBombs = this._countBombs(x, y);
         if (numBombs === 0) {
-          this._markCellAsVisited(x, y, numBombs);
           q.enqueue([x - 1, y - 1]);
           q.enqueue([x - 1, y]);
           q.enqueue([x - 1, y + 1]);
@@ -146,9 +182,8 @@ class MinesweeperGame {
           q.enqueue([x + 1, y - 1]);
           q.enqueue([x + 1, y]);
           q.enqueue([x + 1, y + 1]);
-        } else {
-          this._markCellAsVisited(x, y, numBombs);
         }
+        this._markCellAsVisited(x, y, numBombs);
       }
     }
   }
@@ -166,19 +201,13 @@ class MinesweeperGame {
       if (cell === 1 || cell === 4) {
         this.status = 'lost';
         this._revealGrid();
-        return [this.status, this.grid];
       }
       this._sweep(row, col);
       if (this._gameWon()) {
         this.status = 'won';
-        /* works for now, would want to flag bombs not reveal */
         this._revealGrid();
-        return [this.status, this.grid];
       }
-      return [this.status, this.grid];
     }
-
-    return [this.status, this.grid];
   }
 
   flagCell(row, col) {

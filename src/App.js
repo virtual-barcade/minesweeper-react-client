@@ -23,6 +23,14 @@ class App extends Component {
     };
   }
 
+  /**
+   * The type of width, height, and mines while on the DOM is string.
+   * Ensured that when accessing the Minesweeper API, these string / text values are transformed
+   * to a number since the API is expecting a number. Passing a string breaks the API.
+   *
+   * This would be another good edge case to test as part of TDD (passing string inputs
+   * when the API expects a number).
+   */
   changeDifficulty = e => {
     e.preventDefault();
     const { difficulty, width, height, mines } = this.state;
@@ -58,6 +66,14 @@ class App extends Component {
     this.setState({ grid, status: game.status });
   };
 
+  /**
+   * Created methods to mirror API of MinesweeperGame.
+   *
+   * Could have directly accessed the game instance via state but creating these methods
+   * made writing other methods that interact with the game instance cleaner.
+   *
+   * See handleClick below for an example.
+   */
   cellIsFlagged = (row, col) => {
     return this.state.game.cellIsFlagged(row, col);
   };
