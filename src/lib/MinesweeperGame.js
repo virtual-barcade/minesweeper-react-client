@@ -128,7 +128,7 @@ class MinesweeperGame {
       if (this._matrix[row + i]) {
         for (let j = -1; j <= 1; j++) {
           const value = this._matrix[row + i][col + j];
-          if (value !== undefined && value === 1) {
+          if (value !== undefined && (value === 1 || value === 4)) {
             counter++;
           }
         }
