@@ -52,12 +52,22 @@ class App extends Component {
     return grid;
   };
 
+  _setGrid = () => {
+    const { game } = this.state;
+    const grid = this._copyGrid();
+    this.setState({ grid, status: game.status });
+  };
+
   cellIsFlagged = (row, col) => {
     return this.state.game.cellIsFlagged(row, col);
   };
 
   flagCell = (row, col) => {
     this.state.game.flagCell(row, col);
+  };
+
+  checkCell = (row, col) => {
+    this.state.game.checkCell(Number(row), Number(col));
   };
 
   startTimer = () => {
@@ -75,27 +85,33 @@ class App extends Component {
 
   handleClick = (e, row, col) => {
     e.preventDefault();
-    const { game, time } = this.state;
+    const { time } = this.state;
     if (time === 999) this.startTimer();
-    if (e.type === 'click') {
-      game.checkCell(Number(row), Number(col));
-      const grid = this._copyGrid();
-      this.setState({ grid, status: game.status });
-    } else if (e.type === 'contextmenu') {
-      this.flagCell(row, col);
-      const grid = this._copyGrid();
-      this.setState({ grid, status: game.status });
-    }
+    if (e.type === 'click') this.checkCell(row, col);
+    else if (e.type === 'contextmenu') this.flagCell(row, col);
+    this._setGrid();
   };
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  respondToStatusChange = status => {
+    let message;
+    let className;
+    if (status === 'won') {
+      message = 'You Win!';
+      className = 'App-title game-over';
+    } else {
+      message = '';
+      className = 'App-title';
+    }
+    return [message, className];
+  };
+
   render() {
     const { difficulty, width, height, mines, grid, status, time } = this.state;
-    const message = status === 'won' ? 'You Win!' : '';
-    const className = status === 'won' ? 'App-title game-over' : 'App-title';
+    const [message, className] = this.respondToStatusChange(status);
     if (status === 'won') this.stopTimer();
     return (
       <div className="App">
