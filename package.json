@@ -1,8 +1,9 @@
 {
-  "name": "minesweeper-browser",
+  "name": "minesweeper-react-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "minesweeper-ultimate": "^1.0.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
