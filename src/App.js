@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
+import MinesweeperGame from 'minesweeper-ultimate';
 import Settings from './components/Settings';
 import GameBoard from './components/GameBoard';
 import './styles/App.css';
 import './styles/GameBoard.css';
-
-const MinesweeperGame = require('./lib/MinesweeperGame');
 
 class App extends Component {
   constructor(props) {
@@ -16,21 +15,13 @@ class App extends Component {
       height: '9',
       mines: '10',
       game,
-      grid: game.grid,
-      status: game.status,
+      grid: game.getGrid(),
+      status: game.getStatus(),
       time: 999,
       timerID: null,
     };
   }
 
-  /**
-   * The type of width, height, and mines while on the DOM is string.
-   * Ensured that when accessing the Minesweeper API, these string / text values are transformed
-   * to a number since the API is expecting a number. Passing a string breaks the API.
-   *
-   * This would be another good edge case to test as part of TDD (passing string inputs
-   * when the API expects a number).
-   */
   changeDifficulty = e => {
     e.preventDefault();
     const { difficulty, width, height, mines } = this.state;
@@ -41,14 +32,13 @@ class App extends Component {
       b: Number(mines),
     };
     const game = new MinesweeperGame(difficulty, options);
-    const { grid, status, numColumns, numRows, numBombs } = game;
     this.setState({
       game,
-      grid: grid,
-      status: status,
-      width: numColumns.toString(),
-      height: numRows.toString(),
-      mines: numBombs.toString(),
+      grid: game.getGrid(),
+      status: game.getStatus(),
+      width: game.getNumColumns().toString(),
+      height: game.getNumRows().toString(),
+      mines: game.getNumBombs().toString(),
       time: 999,
       timerID: null,
     });
@@ -56,24 +46,19 @@ class App extends Component {
 
   _copyGrid = () => {
     const { game } = this.state;
-    const grid = game.grid.slice().map(row => row.slice());
+    const grid = game
+      .getGrid()
+      .slice()
+      .map(row => row.slice());
     return grid;
   };
 
   _setGrid = () => {
     const { game } = this.state;
     const grid = this._copyGrid();
-    this.setState({ grid, status: game.status });
+    this.setState({ grid, status: game.getStatus() });
   };
 
-  /**
-   * Created methods to mirror API of MinesweeperGame.
-   *
-   * Could have directly accessed the game instance via state but creating these methods
-   * made writing other methods that interact with the game instance cleaner.
-   *
-   * See handleClick below for an example.
-   */
   cellIsFlagged = (row, col) => {
     return this.state.game.cellIsFlagged(row, col);
   };
